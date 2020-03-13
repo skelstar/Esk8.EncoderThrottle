@@ -15,9 +15,6 @@
 
 i2cEncoderLibV2 Encoder(0x01); /* A0 is soldered */
 
-Smoother smoothedAccel(3, 127);
-Smoother smoothedBrake(10, 127);
-
 enum ThrottleMap
 {
   LINEAR,
@@ -102,6 +99,9 @@ public:
     Encoder.writeAntibouncingPeriod(20); /* Set an anti-bouncing of 200ms */
     Encoder.writeDoublePushPeriod(50);   /*Set a period for the double push of 500ms */
     Encoder.updateStatus();
+
+    _smoothedAccel = new Smoother(3, 127);
+    _smoothedBrake = new Smoother(10, 127);
   }
 
   uint8_t get(bool deadmanHeld)
@@ -143,21 +143,21 @@ public:
     // clear smoothers if idle boundary crossed
     if ((_raw >= 127 && _old < 127) || (_raw < 127 && _old >= 127))
     {
-      smoothedAccel.clear(127);
-      smoothedBrake.clear(127);
+      _smoothedAccel->clear(127);
+      _smoothedBrake->clear(127);
     }
 
     // add to accel smoother
     if (_raw >= 127)
     {
-      smoothedAccel.add(_raw);
-      return smoothedAccel.get();
+      _smoothedAccel->add(_raw);
+      return _smoothedAccel->get();
     }
     // add to braking smoother
     else
     {
-      smoothedBrake.add(_raw);
-      return smoothedBrake.get();
+      _smoothedBrake->add(_raw);
+      return _smoothedBrake->get();
     }
   }
 
@@ -166,7 +166,7 @@ public:
     Encoder.writeCounter(0);
     if (_useMap == SMOOTHED)
     {
-      smoothedAccel.clear(127);
+      _smoothedAccel->clear(127);
     }
   }
 
@@ -232,6 +232,12 @@ public:
     return _useMap;
   }
 
+  void setSmoothBufferLengths(byte brakeBufferLen, byte accelBufferLen)
+  {
+    _smoothedBrake = new Smoother(brakeBufferLen, 127);
+    _smoothedAccel = new Smoother(accelBufferLen, 127);
+  }
+
   // vars
   bool _deadmanHeld = true;
 
@@ -239,6 +245,9 @@ private:
   // callbacks
   EncoderThrottleCb _encoderButtonPushedCb;
   EncoderThrottleCb _encoderButtonDoubleClickCb;
+
+  Smoother *_smoothedAccel;
+  Smoother *_smoothedBrake;
 
   // vars
   int32_t _min, _max;
