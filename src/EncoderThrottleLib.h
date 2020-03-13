@@ -119,13 +119,14 @@ public:
 
       if (_rawthrottle != smoothedt)
       {
+#ifdef PRINT_SMOOTHED_THROTTLE
         Serial.printf("%d %d ", smoothedt, _rawthrottle);
         for (int i = 0; i < abs(smoothedt - _rawthrottle); i++)
         {
           Serial.printf("+");
         }
         Serial.println();
-        // DEBUGVAL(smoothedt, _rawthrottle);
+#endif
       }
       _oldThrottle = _rawthrottle;
       return smoothedt;
@@ -178,12 +179,10 @@ public:
       {
         Encoder.writeCounter((int32_t)0);
         Encoder.writeMax((int32_t)0);
-        DEBUGVAL(_deadmanHeld);
       }
       else
       {
         Encoder.writeMax(_max);
-        DEBUGVAL(_deadmanHeld);
       }
     }
   }
