@@ -235,7 +235,9 @@ public:
   void setSmoothBufferLengths(byte brakeBufferLen, byte accelBufferLen)
   {
     _smoothedBrake = new Smoother(brakeBufferLen, 127);
+    _smoothedBrake->clear(127);
     _smoothedAccel = new Smoother(accelBufferLen, 127);
+    _smoothedAccel->clear(127);
   }
 
   // vars
