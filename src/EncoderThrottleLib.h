@@ -136,14 +136,14 @@ public:
     }
   }
 
-  void setMin(uint8_t min)
+  void setMin(uint8_t steps)
   {
-    _min = min;
+    _min = -steps;
   }
 
-  void setMax(uint8_t max)
+  void setMax(uint8_t steps)
   {
-    _max = max;
+    _max = steps;
   }
 
   uint8_t get(bool deadmanHeld)
