@@ -22,6 +22,12 @@ enum ThrottleMap
   SMOOTHED,
 };
 
+enum EncoderMode
+{
+  THROTTLE,
+  MENU_OPTION
+};
+
 struct MapEncoderToThrottle
 {
   int value;
@@ -67,6 +73,7 @@ public:
   {
     _encoderButtonPushedCb = encoderButtonPushedCb;
     _encoderButtonDoubleClickCb = encoderButtonDoubleClickCb;
+    setMode(EncoderMode::THROTTLE);
     _min = min;
     _max = max;
     _mapped_max = 255;
@@ -102,6 +109,41 @@ public:
 
     _smoothedAccel = new Smoother(3, 127);
     _smoothedBrake = new Smoother(10, 127);
+  }
+
+  int8_t getCounter()
+  {
+    Encoder.updateStatus();
+    return Encoder.readCounterByte();
+  }
+
+  void setMode(EncoderMode mode)
+  {
+    _mode = mode;
+    if (_mode == EncoderMode::THROTTLE)
+    {
+      Encoder.writeCounter((int32_t)0);
+      Encoder.writeMax(_max); /* Set the maximum threshold*/
+      Encoder.writeMin(_min); /* Set the minimum threshold */
+      DEBUGVAL(mode);
+    }
+    else if (_mode == EncoderMode::MENU_OPTION)
+    {
+      Encoder.writeCounter((int32_t)0);
+      Encoder.writeMax(100);  /* Set the maximum threshold*/
+      Encoder.writeMin(-100); /* Set the minimum threshold */
+      DEBUGVAL(mode);
+    }
+  }
+
+  void setMin(uint8_t min)
+  {
+    _min = min;
+  }
+
+  void setMax(uint8_t max)
+  {
+    _max = max;
   }
 
   uint8_t get(bool deadmanHeld)
@@ -255,6 +297,7 @@ private:
   int32_t _min, _max;
   int _mapped_min, _mapped_max;
   ThrottleMap _useMap;
+  EncoderMode _mode;
   uint8_t _rawthrottle, _oldThrottle;
 };
 

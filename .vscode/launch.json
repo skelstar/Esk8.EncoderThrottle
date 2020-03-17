@@ -12,8 +12,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug",
-            "executable": "d:/GitHubs/Esk8.EncoderThrottle/.pio/build/esp32dev.Encoder_Play/firmware.elf",
-            "toolchainBinDir": "C:/Users/skels/.platformio/packages/toolchain-xtensa32/bin",
+            "executable": "C:/Dev/Github/Esk8.EncoderThrottle/.pio/build/esp32dev.Encoder_Play/firmware.elf",
+            "toolchainBinDir": "C:/Users/sean.kelly/.platformio/packages/toolchain-xtensa32/bin",
             "preLaunchTask": {
                 "type": "PlatformIO",
                 "task": "Pre-Debug"
@@ -24,8 +24,8 @@
             "type": "platformio-debug",
             "request": "launch",
             "name": "PIO Debug (skip Pre-Debug)",
-            "executable": "d:/GitHubs/Esk8.EncoderThrottle/.pio/build/esp32dev.Encoder_Play/firmware.elf",
-            "toolchainBinDir": "C:/Users/skels/.platformio/packages/toolchain-xtensa32/bin",
+            "executable": "C:/Dev/Github/Esk8.EncoderThrottle/.pio/build/esp32dev.Encoder_Play/firmware.elf",
+            "toolchainBinDir": "C:/Users/sean.kelly/.platformio/packages/toolchain-xtensa32/bin",
             "internalConsoleOptions": "openOnSessionStart"
         }
     ]
