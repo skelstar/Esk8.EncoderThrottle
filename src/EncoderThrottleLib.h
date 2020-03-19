@@ -117,6 +117,11 @@ public:
     return Encoder.readCounterByte();
   }
 
+  EncoderMode getMode()
+  {
+    return _mode;
+  }
+
   void setMode(EncoderMode mode)
   {
     _mode = mode;
